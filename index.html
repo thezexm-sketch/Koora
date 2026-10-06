@@ -2,697 +2,716 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>تحدي مسار النجوم | Live Wikidata</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090d16">
+  <title>مركز تدريب التريفيا الكروية</title>
   <style>
-    :root {
-      --bg: #090d16;
-      --card-bg: #131b2e;
-      --card-border: #1e293b;
-      --panel: #0b111d;
-      --accent: #0284c7;
-      --accent-light: #38bdf8;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --warning: #f59e0b;
+    :root{
+      --bg:#090d16; --card:#131b2e; --line:#1e293b; --panel:#0b1120; --raise:#1a2540;
+      --accent:#0284c7; --accent-l:#38bdf8; --text:#f8fafc; --muted:#94a3b8;
+      --ok:#22c55e; --bad:#ef4444; --warn:#f59e0b;
     }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+    body{background:radial-gradient(1100px 560px at 50% -10%,#13203a 0%,var(--bg) 62%) fixed;color:var(--text);min-height:100vh}
+    .wrap{max-width:760px;margin:0 auto;padding:16px 14px 48px}
+    h1{font-size:clamp(24px,6vw,34px);font-weight:800;color:var(--accent-l);letter-spacing:-.4px}
+    h2{font-size:15px;font-weight:700;color:var(--muted);margin:26px 0 10px}
+    p.sub{color:var(--muted);font-size:14px;margin-top:6px;line-height:1.7}
+    .hero{padding:22px 4px 0;text-align:center}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(2,132,199,.15);border:1px solid rgba(56,189,248,.3);color:var(--accent-l);font-size:12px;padding:5px 12px;border-radius:20px;margin-top:12px;font-weight:600}
+    .dot{width:7px;height:7px;background:var(--ok);border-radius:50%;box-shadow:0 0 8px var(--ok)}
+    .dot.off{background:var(--warn);box-shadow:0 0 8px var(--warn)}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Arabic", sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    .chips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .chip{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px;text-align:start;color:var(--text);cursor:pointer;display:block;width:100%;font-weight:700}
+    .chip small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:3px}
+    .chip.on{border-color:var(--accent-l);background:rgba(2,132,199,.14)}
 
-    body {
-      background:
-        radial-gradient(900px 400px at 85% -10%, rgba(2,132,199,0.18), transparent 60%),
-        var(--bg);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 16px;
-    }
+    .modes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .mode{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:start;color:var(--text);cursor:pointer;display:flex;flex-direction:column;gap:6px;min-height:132px;transition:transform .12s,border-color .2s}
+    .mode:hover{border-color:#2f4a73}.mode:active{transform:scale(.98)}
+    .mode b{font-size:17px}.mode span{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:500}
+    .mode em{margin-top:auto;font-style:normal;font-size:12px;color:var(--accent-l);font-weight:700}
+    @media(min-width:640px){.chips{grid-template-columns:repeat(4,1fr)}.modes{grid-template-columns:repeat(4,1fr)}}
 
-    .app-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      width: 100%;
-      max-width: 1040px;
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-      margin: auto;
-    }
+    .topbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .topbar .ttl{flex:1;text-align:center;font-weight:800;color:var(--accent-l);font-size:15px}
+    .pill{background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap}
+    .bar{height:5px;background:var(--line);border-radius:5px;overflow:hidden;margin-bottom:16px}
+    .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-l));transition:width .35s}
+    .stage{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:clamp(14px,3.5vw,28px);box-shadow:0 24px 60px rgba(0,0,0,.45)}
 
-    .header { text-align: center; }
-    .header h1 {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--accent-light);
-      letter-spacing: -0.5px;
-    }
+    .btn{border:none;border-radius:14px;padding:15px;font-weight:700;font-size:15px;cursor:pointer;color:#fff;transition:opacity .15s,transform .1s;width:100%}
+    .btn:active{transform:scale(.98)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .b1{background:var(--accent)}.b2{background:#334155}
+    .b3{background:rgba(239,68,68,.14);color:var(--bad);border:1px solid rgba(239,68,68,.3)}
+    .b4{background:var(--ok);color:#052e16}
+    .btn.small{padding:9px 14px;font-size:13px;width:auto;border-radius:12px}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    input.ans{width:100%;padding:15px;background:var(--panel);border:1.5px solid #334155;border-radius:14px;color:#fff;font-size:18px;text-align:center;outline:none;margin-bottom:10px}
+    input.ans:focus{border-color:var(--accent-l);box-shadow:0 0 14px rgba(56,189,248,.2)}
+    .fb{min-height:30px;margin-top:12px;font-weight:700;font-size:15px;text-align:center;line-height:1.6}
+    .fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.info{color:var(--warn)}
+    .shake{animation:shake .35s}
+    .note{font-size:12px;color:var(--warn);text-align:center;margin-bottom:10px}
+    .state{padding:34px 8px;text-align:center;color:var(--muted);font-size:14px}
+    .spinner{border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent-l);border-radius:50%;width:28px;height:28px;animation:spin .8s linear infinite;margin:0 auto 12px}
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(2, 132, 199, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: var(--accent-light);
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin: 8px 0 16px 0;
-      font-weight: 600;
-    }
+    .tl{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(10px,3vw,20px);margin-bottom:14px;display:flex;flex-direction:column}
+    .club{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#1a2540,#162038);border:1px solid #2b3a58;border-radius:14px;padding:10px 14px}
+    .club.new{animation:pop .45s cubic-bezier(.16,1,.3,1) both}
+    .logo{width:clamp(46px,10vw,60px);height:clamp(46px,10vw,60px);flex-shrink:0;border-radius:12px;background:#f1f5f9;padding:6px;display:flex;align-items:center;justify-content:center}
+    .logo img{max-width:100%;max-height:100%;object-fit:contain}
+    .logo.fb2{background:#1e293b;border:1px solid #334155;color:var(--accent-l);font-weight:800;font-size:17px}
+    .cinfo{flex:1;min-width:0}
+    .cname{font-weight:800;font-size:clamp(15px,3.6vw,19px)}
+    .csub{font-size:12px;color:var(--muted);direction:ltr;text-align:start;margin-top:2px}
+    .cmeta{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
+    .num{background:var(--accent);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+    .yrs{font-size:11.5px;color:var(--muted);background:var(--panel);border:1px solid #263349;padding:2px 8px;border-radius:20px;direction:ltr;white-space:nowrap}
+    .arrow{display:flex;justify-content:center;color:var(--accent-l);padding:3px 0}
+    .arrow svg{width:22px;height:24px}
+    .club.locked{border-style:dashed;background:transparent;justify-content:center;color:var(--muted);font-weight:700;font-size:14px;padding:15px}
 
-    .badge-dot {
-      width: 7px; height: 7px;
-      background: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--success);
-    }
+    .prompt{font-weight:800;font-size:clamp(16px,4vw,20px);text-align:center;margin-bottom:14px;line-height:1.6}
+    .plist{display:grid;gap:10px;margin-bottom:14px}
+    .pcard{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#1a2540,#162038);border:1px solid #2b3a58;border-radius:14px;padding:14px 16px;animation:pop .4s both}
+    .pcard b{font-size:17px;flex:1}.pcard small{color:var(--muted);direction:ltr;font-size:12px}
+    .pcard span{font-size:12px;background:var(--panel);border:1px solid #263349;padding:2px 9px;border-radius:20px;color:var(--muted)}
+    .hint{min-height:22px;text-align:center;font-size:13px;color:var(--warn);margin-bottom:8px;font-weight:700}
 
-    .dashboard {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: var(--panel);
-      padding: 12px 18px;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      border: 1px solid var(--card-border);
-      text-align: center;
-    }
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-    .stat-label { font-size: 12px; color: var(--text-muted); }
-    .stat-val { font-size: 20px; font-weight: 800; }
+    .gtable{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+    .gc{border-radius:12px;min-height:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;font-size:12.5px;font-weight:700;line-height:1.4;word-break:break-word}
+    .gc.corner{background:none}
+    .gc.head{background:var(--raise);border:1px solid #2b3a58;color:var(--accent-l)}
+    .gc.head small{display:block;color:var(--muted);font-weight:500;font-size:10.5px}
+    button.gc{background:var(--panel);border:1.5px dashed #334155;color:var(--muted);font-size:22px;cursor:pointer}
+    button.gc.sel{border:1.5px solid var(--accent-l);color:var(--accent-l);box-shadow:0 0 14px rgba(56,189,248,.25)}
+    .gc.ok{background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.5);color:#bbf7d0;animation:pop .35s both}
+    .gc.ok.help{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.5);color:#fde68a}
 
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      align-items: start;
-    }
-    @media (min-width: 860px) {
-      body { padding: 32px; }
-      .app-card { padding: 32px; }
-      .layout { grid-template-columns: 1.35fr 1fr; gap: 24px; }
-      .control-panel { position: sticky; top: 24px; }
-      .career-container { max-height: 70vh; }
-    }
+    .flip{background:linear-gradient(135deg,#1a2540,#162038);border:1px solid #2b3a58;border-radius:18px;padding:30px 16px;text-align:center;cursor:pointer;margin-bottom:14px;min-height:170px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+    .flip b{font-size:clamp(22px,6vw,30px)}.flip small{color:var(--muted);direction:ltr}.flip i{font-style:normal;font-size:12px;color:var(--accent-l);margin-top:8px}
+    .decks{display:grid;gap:10px}
 
-    .career-container {
-      background: var(--panel);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
-      min-height: 200px;
-      max-height: 54vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      scroll-behavior: smooth;
-    }
-    .career-container.center { justify-content: center; text-align: center; align-items: center; }
+    .sum{text-align:center}
+    .big{font-size:52px;font-weight:900;color:var(--accent-l);line-height:1.1}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+    .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 6px}
+    .stat b{display:block;font-size:20px}.stat small{color:var(--muted);font-size:11.5px}
+    .rev{text-align:start;margin:14px 0}
+    .rev h3{font-size:14px;color:var(--warn);margin-bottom:8px}
+    .ri{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+    .ri small{display:block;color:var(--muted);margin-top:3px;line-height:1.5}
+    .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.8}
 
-    .club-node {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: #172033;
-      border: 1px solid #2b3a55;
-      border-radius: 14px;
-      padding: 10px 14px;
-    }
-    .club-node.new { animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-
-    .club-logo {
-      width: 48px; height: 48px;
-      flex-shrink: 0;
-      background: #f1f5f9;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-      padding: 6px;
-    }
-    .club-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .club-logo span { color: #0f172a; font-weight: 800; font-size: 18px; }
-
-    .club-info { flex: 1; min-width: 0; text-align: right; }
-    .club-name { font-size: 16px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .club-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; direction: ltr; text-align: right; }
-
-    .club-order {
-      background: var(--accent);
-      color: #fff;
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .club-node.hidden-node {
-      border-style: dashed;
-      border-color: #334155;
-      background: transparent;
-      color: var(--text-muted);
-    }
-    .club-node.hidden-node .club-logo { background: #1e293b; }
-    .club-node.hidden-node .club-logo span { color: var(--accent-light); font-size: 22px; }
-
-    .connector {
-      display: flex; justify-content: center;
-      height: 26px;
-      color: var(--accent-light);
-    }
-    .connector.new { animation: fadeIn 0.35s ease; }
-    .connector svg { height: 100%; }
-
-    .input-wrapper { margin-bottom: 12px; }
-    input[type="text"] {
-      width: 100%;
-      padding: 15px;
-      background: var(--panel);
-      border: 1.5px solid #334155;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 16px;
-      text-align: center;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-    input[type="text"]:focus {
-      border-color: var(--accent-light);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
-    }
-
-    .action-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.15s ease, transform 0.1s ease;
-    }
-    button:active { transform: scale(0.98); }
-    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    button:focus-visible, input:focus-visible { outline: 2px solid var(--accent-light); outline-offset: 2px; }
-
-    .btn-primary { background: var(--accent); color: white; }
-    .btn-secondary { background: #334155; color: white; }
-    .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); width: 100%; }
-
-    .hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 12px; line-height: 1.7; }
-
-    .feedback-box {
-      min-height: 28px;
-      margin-top: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-    }
-    .feedback-box.correct { color: var(--success); }
-    .feedback-box.wrong { color: var(--danger); }
-    .feedback-box.info { color: var(--warning); }
-
-    .spinner {
-      border: 3px solid rgba(255,255,255,0.1);
-      border-top: 3px solid var(--accent-light);
-      border-radius: 50%;
-      width: 28px; height: 28px;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 10px auto;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @media (prefers-reduced-motion: reduce) {
-      .club-node.new, .connector.new { animation: none; }
-      .career-container { scroll-behavior: auto; }
-    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+    @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}
+    :focus-visible{outline:2px solid var(--accent-l);outline-offset:2px}
   </style>
 </head>
 <body>
+<div id="app"></div>
 
-  <div class="app-card" id="appCard">
-    <div class="header">
-      <h1>تحدي مسار النجوم</h1>
-      <div class="badge">
-        <div class="badge-dot"></div>
-        <span>Live API: Wikidata</span>
-      </div>
-    </div>
+<script>
+"use strict";
+/* ================= أدوات ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 
-    <div class="dashboard">
-      <div class="stat-item">
-        <span class="stat-label">مجموع النقاط</span>
-        <span class="stat-val" id="score">0</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">المرحلة الحالية</span>
-        <span class="stat-val" dir="ltr" id="roundTracker">1 / 10</span>
-      </div>
-    </div>
+// تطبيع النصوص: يتجاهل الهمزات والتشكيل و"ال" التعريف والمسافات والرموز
+function nrm(s) {
+  s = String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f\u064B-\u065F\u0640]/g, "");
+  s = s.replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي");
+  s = s.split(/\s+/).map(w => (w.length > 3 && w.startsWith("ال")) ? w.slice(2) : w).join(" ");
+  return s.replace(/[^a-z0-9\u0621-\u064A]/g, "");
+}
+const baseTitle = t => t.replace(/\s*\(.*\)$/, "");
 
-    <div class="layout">
-      <div class="career-container" id="careerContainer"></div>
+/* ================= البيانات ================= */
+const NAT = {
+  AR:["الأرجنتين","Argentina"], PT:["البرتغال","Portugal"], BE:["بلجيكا","Belgium"], FR:["فرنسا","France"],
+  NO:["النرويج","Norway"], EG:["مصر","Egypt"], HR:["كرواتيا","Croatia"], NL:["هولندا","Netherlands"],
+  CI:["ساحل العاج","Ivory Coast"], CO:["كولومبيا","Colombia"], UY:["أوروغواي","Uruguay"], SE:["السويد","Sweden"],
+  BR:["البرازيل","Brazil"], ES:["إسبانيا","Spain"], IT:["إيطاليا","Italy"], BA:["البوسنة","Bosnia"], DE:["ألمانيا","Germany"]
+};
 
-      <div class="control-panel">
-        <div class="input-wrapper">
-          <input type="text" id="playerInput" placeholder="اكتب اسم اللاعب..." autocomplete="off">
-        </div>
+// الاسم الإنجليزي : "الاسم بالعربي|مرادفات مفصولة بفواصل"
+const CLUBS_RAW = {
+  "Barcelona":"برشلونة|barca,fc barcelona,برشا",
+  "Real Madrid":"ريال مدريد|ريال",
+  "Paris Saint-Germain":"باريس سان جيرمان|باريس,psg,paris",
+  "AC Milan":"ميلان|milan,ايه سي ميلان",
+  "Inter Milan":"إنتر ميلان|انتر,inter,internazionale",
+  "Juventus":"يوفنتوس|يوفي,juve",
+  "Chelsea":"تشيلسي|",
+  "Manchester City":"مانشستر سيتي|سيتي,man city",
+  "Manchester United":"مانشستر يونايتد|يونايتد,man united,man utd",
+  "Liverpool":"ليفربول|",
+  "Arsenal":"آرسنال|ارسنال",
+  "Bayern Munich":"بايرن ميونخ|بايرن,bayern",
+  "Borussia Dortmund":"بوروسيا دورتموند|دورتموند,dortmund",
+  "Ajax":"أياكس|اياكس",
+  "Roma":"روما|as roma",
+  "Atlético Madrid":"أتلتيكو مدريد|اتلتيكو,atletico madrid,atletico",
+  "Tottenham Hotspur":"توتنهام|spurs,tottenham",
+  "Porto":"بورتو|fc porto",
+  "Galatasaray":"غلطة سراي|جالطة سراي,جالاتاسراي",
+  "Fenerbahçe":"فنربخشة|فنربهتشه,fenerbahce",
+  "Beşiktaş":"بشكتاش|besiktas",
+  "VfL Wolfsburg":"فولفسبورغ|فولفسبورج,wolfsburg",
+  "Monaco":"موناكو|as monaco",
+  "Lyon":"ليون|olympique lyonnais",
+  "Marseille":"مارسيليا|olympique de marseille",
+  "Groningen":"خرونينغن|خرونينجن,fc groningen",
+  "Boca Juniors":"بوكا جونيورز|بوكا",
+  "Sevilla":"إشبيلية|اشبيليه",
+  "Lazio":"لاتسيو|",
+  "Torino":"تورينو|",
+  "Genoa":"جنوى|جنوه",
+  "Fiorentina":"فيورنتينا|",
+  "Inter Miami":"إنتر ميامي|انتر ميامي",
+  "Shanghai Shenhua":"شنغهاي شنهوا|شنغهاي",
+  "Al Nassr":"النصر|النصر السعودي",
+  "Napoli":"نابولي|",
+  "Athletic Bilbao":"أتلتيك بلباو|بلباو,athletic club",
+  "Werder Bremen":"فيردر بريمن|بريمن",
+  "Osasuna":"أوساسونا|",
+  "Sassuolo":"ساسولو|",
+  "Empoli":"إمبولي|",
+  "Leicester City":"ليستر سيتي|ليستر",
+  "Burnley":"بيرنلي|",
+  "AZ Alkmaar":"ألكمار|az",
+  "Basel":"بازل|",
+  "PSV Eindhoven":"آيندهوفن|psv,ايندهوفن",
+  "Feyenoord":"فينورد|فاينورد",
+  "Nacional":"ناسيونال|",
+  "Corinthians":"كورينثيانز|كورنثيانز",
+  "West Ham United":"وست هام|west ham",
+  "Lille":"ليل|",
+  "Caen":"كاين|",
+  "KRC Genk":"خنك|genk",
+  "São Paulo":"ساو باولو|sao paulo",
+  "Metz":"ميتز|",
+  "Fluminense":"فلومينينسي|"
+};
+const CLUBS = {};
+for (const k in CLUBS_RAW) { const [ar, al] = CLUBS_RAW[k].split("|"); CLUBS[k] = { ar, al: al ? al.split(",") : [] }; }
 
-        <div class="action-grid">
-          <button class="btn-primary" id="btnSubmit" onclick="checkAnswer()">تأكيد الإجابة</button>
-          <button class="btn-secondary" id="btnReveal" onclick="revealNextClub()">كشف محطة أخرى</button>
-        </div>
+// [المستوى, عنوان ويكيبيديا, الاسم العربي, مفاتيح الإجابة, الجنسية, الأندية (احتياطي)]
+const P_RAW = [
+  [1,"Lionel Messi","ليونيل ميسي","ميسي,ليو,messi","AR","Newell's Old Boys|Barcelona|Paris Saint-Germain|Inter Miami"],
+  [1,"Cristiano Ronaldo","كريستيانو رونالدو","رونالدو,كريستيانو,ronaldo,cr7","PT","Sporting CP|Manchester United|Real Madrid|Juventus|Manchester United|Al Nassr"],
+  [1,"Kevin De Bruyne","كيفين دي بروين","دي بروين,ديبروين,de bruyne,debruyne","BE","KRC Genk|Chelsea|Werder Bremen|VfL Wolfsburg|Manchester City|Napoli"],
+  [1,"Kylian Mbappé","كيليان مبابي","مبابي,mbappe","FR","Monaco|Paris Saint-Germain|Real Madrid"],
+  [1,"Erling Haaland","إيرلينغ هالاند","هالاند,هولاند,haaland","NO","Bryne|Molde|Red Bull Salzburg|Borussia Dortmund|Manchester City"],
+  [1,"Mohamed Salah","محمد صلاح","صلاح,salah","EG","Arab Contractors|Basel|Chelsea|Fiorentina|Roma|Liverpool"],
+  [1,"Luka Modrić","لوكا مودريتش","مودريتش,modric","HR","Dinamo Zagreb|Tottenham Hotspur|Real Madrid|AC Milan"],
 
-        <button class="btn-danger" id="btnSkip" onclick="skipPlayer()">تخطي اللاعب</button>
+  [2,"Carlos Tevez","كارلوس تيفيز","تيفيز,تيفز,tevez","AR","Boca Juniors|Corinthians|West Ham United|Manchester United|Manchester City|Juventus|Boca Juniors|Shanghai Shenhua"],
+  [2,"Wesley Sneijder","ويسلي شنايدر","شنايدر,سنايدر,sneijder","NL","Ajax|Real Madrid|Inter Milan|Galatasaray|Nice|Al-Gharafa"],
+  [2,"Arjen Robben","آريين روبين","روبين,روبن,robben","NL","Groningen|PSV Eindhoven|Chelsea|Real Madrid|Bayern Munich|Groningen"],
+  [2,"Didier Drogba","ديدييه دروغبا","دروغبا,دروجبا,drogba","CI","Le Mans|Guingamp|Marseille|Chelsea|Shanghai Shenhua|Galatasaray|Chelsea|Montreal Impact"],
+  [2,"Radamel Falcao","راداميل فالكاو","فالكاو,falcao","CO","River Plate|Porto|Atlético Madrid|Monaco|Manchester United|Chelsea|Galatasaray|Rayo Vallecano"],
+  [2,"Luis Suárez","لويس سواريز","سواريز,suarez","UY","Nacional|Groningen|Ajax|Liverpool|Barcelona|Atlético Madrid|Nacional|Inter Miami"],
+  [2,"Zlatan Ibrahimović","زلاتان إبراهيموفيتش","زلاتان,ابراهيموفيتش,ابرا,ibrahimovic,zlatan","SE","Malmö FF|Ajax|Juventus|Inter Milan|Barcelona|AC Milan|Paris Saint-Germain|Manchester United|LA Galaxy|AC Milan"],
+  [2,"Robin van Persie","روبن فان بيرسي","فان بيرسي,فانبيرسي,van persie,vanpersie","NL","Feyenoord|Arsenal|Manchester United|Fenerbahçe|Feyenoord"],
+  [2,"Kaká","كاكا","كاكا,kaka","BR","São Paulo|AC Milan|Real Madrid|AC Milan|São Paulo|Orlando City"],
+  [2,"Ronaldinho","رونالدينيو","رونالدينيو,ronaldinho","BR","Grêmio|Paris Saint-Germain|Barcelona|AC Milan|Flamengo|Atlético Mineiro|Querétaro|Fluminense"],
+  [2,"Thiago Silva","تياغو سيلفا","تياغو سيلفا,تياجو سيلفا,thiago silva","BR","Fluminense|AC Milan|Paris Saint-Germain|Chelsea|Fluminense"],
 
-        <div class="feedback-box" id="feedback"></div>
-        <div class="hint">كل محطة تكشفها بتقلل نقاط السؤال. الأندية مرتبة من البداية لحد آخر نادي.</div>
-      </div>
-    </div>
-  </div>
+  [3,"Javi Martínez","خافي مارتينيز","خافي مارتينيز,خافي,javi martinez","ES","Osasuna|Athletic Bilbao|Bayern Munich|Qatar SC"],
+  [3,"Wout Weghorst","فاوت فيغورست","فيغورست,فيجورست,weghorst","NL","Emmen|Heracles Almelo|AZ Alkmaar|VfL Wolfsburg|Burnley|Beşiktaş|Manchester United|TSG Hoffenheim|Ajax"],
+  [3,"Paulo Ferreira (footballer, born 1979)","باولو فيريرا","باولو فيريرا,فيريرا,paulo ferreira","PT","Vitória Setúbal|Porto|Chelsea"],
+  [3,"Davide Frattesi","دافيدي فراتيسي","فراتيسي,فراتسي,frattesi","IT","Roma|Empoli|Sassuolo|Inter Milan"],
+  [3,"N'Golo Kanté","نغولو كانتي","كانتي,kante","FR","Boulogne|Caen|Leicester City|Chelsea|Al-Ittihad|Fenerbahçe"],
+  [3,"Eden Hazard","إيدين هازارد","هازارد,hazard","BE","Lille|Chelsea|Real Madrid"],
+  [3,"Edin Džeko","إدين دجيكو","دجيكو,جيكو,dzeko","BA","Željezničar|Teplice|VfL Wolfsburg|Manchester City|Roma|Inter Milan|Fenerbahçe|Schalke 04|Fiorentina"],
+  [3,"Miralem Pjanić","ميراليم بيانيتش","بيانيتش,بيانتش,pjanic","BA","Metz|Lyon|Roma|Juventus|Barcelona|Beşiktaş|Sharjah"],
+  [3,"Ciro Immobile","تشيرو إيموبيلي","إيموبيلي,ايموبيلي,immobile","IT","Juventus|Siena|Grosseto|Genoa|Pescara|Torino|Borussia Dortmund|Sevilla|Torino|Lazio|Beşiktaş|Bologna"],
+  [3,"Mario Gómez","ماريو جوميز","جوميز,غوميز,gomez","DE","VfB Stuttgart|Bayern Munich|Fiorentina|Beşiktaş|VfL Wolfsburg|VfB Stuttgart"]
+];
+const PLAYERS = P_RAW.map(([tier, wiki, ar, keys, nat, clubs]) => ({ tier, wiki, ar, keys: keys.split(","), nat, clubs: clubs.split("|") }));
 
-  <script>
-    // wiki = عنوان صفحة اللاعب على ويكيبيديا الإنجليزية (بنجيب منه بيانات Wikidata)
-    const ROSTER = [
-      { wiki: "Zlatan Ibrahimović", name: "زلاتان إبراهيموفيتش", keys: ["ابراهيموفيتش", "زلاتان", "ابرا", "ibrahimovic", "zlatan"] },
-      { wiki: "Luis Suárez",        name: "لويس سواريز",        keys: ["سواريز", "لويس سواريز", "suarez"] },
-      { wiki: "Arjen Robben",       name: "آريين روبين",        keys: ["روبين", "روبن", "ارين روبين", "robben"] },
-      { wiki: "Didier Drogba",      name: "ديدييه دروغبا",      keys: ["دروغبا", "دروجبا", "drogba"] },
-      { wiki: "Carlos Tevez",       name: "كارلوس تيفيز",       keys: ["تيفيز", "كارلوس تيفيز", "tevez"] },
-      { wiki: "Luka Modrić",        name: "لوكا مودريتش",       keys: ["مودريتش", "لوكا مودريتش", "modric"] },
-      { wiki: "Mesut Özil",         name: "مسعود أوزيل",        keys: ["اوزيل", "أوزيل", "ozil", "oezil"] },
-      { wiki: "Kylian Mbappé",      name: "كيليان مبابي",       keys: ["مبابي", "كيليان مبابي", "mbappe"] },
-      { wiki: "Erling Haaland",     name: "إيرلينغ هالاند",     keys: ["هالاند", "هولاند", "haaland"] },
-      { wiki: "Lionel Messi",       name: "ليونيل ميسي",        keys: ["ميسي", "ليو", "messi"] },
-      { wiki: "Mohamed Salah",      name: "محمد صلاح",          keys: ["صلاح", "محمد صلاح", "salah", "mosalah"] },
-      { wiki: "Cristiano Ronaldo",  name: "كريستيانو رونالدو",  keys: ["رونالدو", "كريستيانو", "كريستيانو رونالدو", "ronaldo", "cr7", "cristiano"] },
-      { wiki: "Neymar",             name: "نيمار",              keys: ["نيمار", "نيمار جونيور", "neymar"] },
-      { wiki: "Karim Benzema",      name: "كريم بنزيما",        keys: ["بنزيما", "بنزيمه", "كريم بنزيما", "benzema"] },
-      { wiki: "Robert Lewandowski", name: "روبرت ليفاندوفسكي",  keys: ["ليفاندوفسكي", "ليفاندوسكي", "ليفا", "lewandowski"] },
-      { wiki: "Eden Hazard",        name: "إيدين هازارد",       keys: ["هازارد", "ايدين هازارد", "hazard"] },
-      { wiki: "Kevin De Bruyne",    name: "كيفين دي بروين",     keys: ["دي بروين", "دي بروني", "كيفين دي بروين", "debruyne", "bruyne"] },
-      { wiki: "Gareth Bale",        name: "غاريث بيل",          keys: ["بيل", "جاريث بيل", "غاريث بيل", "bale"] }
-    ];
+// بطاقات التشكيلات التاريخية (تشكيل المباراة النهائية)
+const SQUADS = [
+  { k: "chelsea2012", name: "تشيلسي 2012 — نهائي دوري الأبطال", players: [
+    ["Petr Čech","بيتر تشيك","حارس مرمى"],["José Bosingwa","جوزيه بوسينجوا","ظهير أيمن"],["Gary Cahill","غاري كاهيل","قلب دفاع"],
+    ["David Luiz","ديفيد لويز","قلب دفاع"],["Ashley Cole","آشلي كول","ظهير أيسر"],["John Obi Mikel","جون أوبي ميكيل","وسط ارتكاز"],
+    ["Frank Lampard","فرانك لامبارد","وسط"],["Salomon Kalou","سالومون كالو","جناح"],["Juan Mata","خوان ماتا","صانع ألعاب"],
+    ["Florent Malouda","فلوران مالودا","جناح"],["Didier Drogba","ديدييه دروغبا","مهاجم"] ] },
+  { k: "inter2010", name: "إنتر 2010 — نهائي دوري الأبطال", players: [
+    ["Júlio César (footballer, born 1979)","جوليو سيزار","حارس مرمى"],["Maicon","مايكون","ظهير أيمن"],["Lúcio","لوسيو","قلب دفاع"],
+    ["Walter Samuel","والتر صامويل","قلب دفاع"],["Cristian Chivu","كريستيان كيفو","ظهير أيسر"],["Javier Zanetti","خافيير زانيتي","وسط"],
+    ["Esteban Cambiasso","إستيبان كامبياسو","وسط"],["Samuel Eto'o","صامويل إيتو","جناح"],["Wesley Sneijder","ويسلي شنايدر","صانع ألعاب"],
+    ["Goran Pandev","غوران بانديف","جناح"],["Diego Milito","دييغو ميليتو","مهاجم"] ] },
+  { k: "barca2011", name: "برشلونة 2011 — نهائي دوري الأبطال", players: [
+    ["Víctor Valdés","فيكتور فالديس","حارس مرمى"],["Dani Alves","داني ألفيش","ظهير أيمن"],["Gerard Piqué","جيرارد بيكيه","قلب دفاع"],
+    ["Javier Mascherano","خافيير ماسكيرانو","قلب دفاع"],["Éric Abidal","إيريك أبيدال","ظهير أيسر"],["Sergio Busquets","سيرجيو بوسكيتس","وسط ارتكاز"],
+    ["Xavi","تشافي","وسط"],["Andrés Iniesta","أندريس إنييستا","وسط"],["Pedro (footballer, born 1987)","بيدرو","جناح"],
+    ["Lionel Messi","ليونيل ميسي","مهاجم"],["David Villa","ديفيد فيا","مهاجم"] ] }
+];
 
-    const ROUNDS_PER_GAME = 10;
+/* ================= مطابقة الإجابات ================= */
+function playerNames(p) {
+  if (p._n) return p._n;
+  const set = new Set();
+  [...(p.keys || []), p.ar, baseTitle(p.wiki)].forEach(k => set.add(nrm(k)));
+  [baseTitle(p.wiki).split(/\s+/).pop(), p.ar.split(/\s+/).pop()].forEach(k => { if (nrm(k).length >= 4) set.add(nrm(k)); });
+  return (p._n = set);
+}
+const findPlayer = (guess, pool = PLAYERS) => { const g = nrm(guess); return g ? pool.find(p => playerNames(p).has(g)) || null : null; };
+const clubNames = c => { const e = CLUBS[c] || {}; return new Set([c, e.ar, ...(e.al || [])].filter(Boolean).map(nrm)); };
+const clubLabel = c => (CLUBS[c] && CLUBS[c].ar) || c;
 
-    let rounds = [];
-    let currentIndex = 0;
-    let score = 0;
-    let revealedCount = 2;
-    let loadedClubs = [];
-    const clubsCache = {}; // wiki title -> Promise
+/* ================= Wikidata API + كاش + بيانات احتياطية ================= */
+const WD_API = "https://www.wikidata.org/w/api.php";
+const NATIONAL_TYPES = ["Q6979593", "Q1194951", "Q20678767"];
+const BAD_ANY = /\b(national|olympic|under[- ]?\d+|U-?\d{2})\b/i;
+const BAD_END = /\b(youth|reserves?|juvenil|castilla|academy|II|III|B|C)$/i;
+let apiDownUntil = 0;
 
-    function shuffle(arr) {
-      const a = arr.slice();
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function cleanStr(str) {
-      return str.trim().toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[أإآ]/g, 'ا')
-        .replace(/ة/g, 'ه')
-        .replace(/ى/g, 'ي')
-        .replace(/[\s\-_'.]/g, '');
-    }
-
-    /* ---------------- Wikidata API ---------------- */
-
-    async function fetchJSON(url, ms = 10000, tries = 3) {
-      let lastErr;
-      for (let i = 0; i < tries; i++) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), ms);
-        try {
-          const res = await fetch(url, { signal: ctrl.signal });
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          const data = await res.json();
-          if (data.error) throw new Error(data.error.info || "API error");
-          return data;
-        } catch (e) {
-          lastErr = e;
-          await new Promise(r => setTimeout(r, 600 * (i + 1)));
-        } finally {
-          clearTimeout(timer);
-        }
-      }
-      throw lastErr;
-    }
-
-    const WD = "https://www.wikidata.org/w/api.php?format=json&origin=*&";
-    // منتخبات وفرق الشباب بنستبعدها
-    const NATIONAL_TYPES = new Set(["Q6979593", "Q1194951"]);
-    const NOT_CLUB_LABEL = /national|olympic|under-\d+|\bU-?\d{2}\b|youth|المنتخب|منتخب/i;
-
-    function claimValue(c) { return c?.mainsnak?.datavalue?.value; }
-    function bestClaim(list) {
-      if (!list || !list.length) return null;
-      return list.find(c => c.rank === "preferred") || list[0];
-    }
-    function yearOf(time) {
-      if (!time) return null;
-      const y = parseInt(time.slice(1, 5), 10);
-      return y > 0 ? y : null;
-    }
-    function logoUrl(file) {
-      return "https://commons.wikimedia.org/wiki/Special:FilePath/" + encodeURIComponent(file) + "?width=120";
-    }
-
-    async function fetchClubs(player) {
-      // 1) بيانات اللاعب: كل عضوياته في الأندية (P54)
-      const pData = await fetchJSON(
-        WD + "action=wbgetentities&sites=enwiki&normalize=1&props=claims&titles=" +
-        encodeURIComponent(player.wiki)
-      );
-      const entity = Object.values(pData.entities || {})[0];
-      if (!entity || entity.missing !== undefined) throw new Error("player not found");
-
-      const stints = (entity.claims?.P54 || [])
-        .filter(c => c.rank !== "deprecated" && claimValue(c)?.id)
-        .map((c, i) => ({
-          id: claimValue(c).id,
-          start: c.qualifiers?.P580?.[0]?.datavalue?.value?.time || "",
-          end: c.qualifiers?.P582?.[0]?.datavalue?.value?.time || "",
-          order: i
-        }));
-      if (!stints.length) throw new Error("no clubs");
-
-      // 2) بيانات الأندية: الاسم (عربي/إنجليزي) + الشعار
-      const ids = [...new Set(stints.map(s => s.id))];
-      const info = {};
-      for (let i = 0; i < ids.length; i += 50) {
-        const chunk = ids.slice(i, i + 50);
-        const cData = await fetchJSON(
-          WD + "action=wbgetentities&props=labels|claims&languages=ar|en&ids=" + chunk.join("|")
-        );
-        Object.entries(cData.entities || {}).forEach(([id, e]) => {
-          const types = (e.claims?.P31 || []).map(c => claimValue(c)?.id);
-          const logoClaim = bestClaim(e.claims?.P154) || bestClaim(e.claims?.P8972);
-          const logoFile = claimValue(logoClaim);
-          info[id] = {
-            en: e.labels?.en?.value || "",
-            ar: e.labels?.ar?.value || "",
-            national: types.some(t => NATIONAL_TYPES.has(t)),
-            logo: typeof logoFile === "string" ? logoUrl(logoFile) : null
-          };
-        });
-      }
-
-      // 3) فلترة المنتخبات + ترتيب زمني + دمج التكرار المتتالي
-      const sorted = stints
-        .filter(s => {
-          const c = info[s.id];
-          return c && !c.national && !NOT_CLUB_LABEL.test(c.en);
-        })
-        .sort((a, b) => (a.start || "").localeCompare(b.start || "") || a.order - b.order);
-
-      const clubs = [];
-      sorted.forEach(s => {
-        const c = info[s.id];
-        const last = clubs[clubs.length - 1];
-        if (last && last.id === s.id) {
-          last.endYear = yearOf(s.end) || last.endYear;
-          return;
-        }
-        clubs.push({
-          id: s.id,
-          name: c.ar || c.en,
-          nameEn: c.ar ? c.en : "",
-          logo: c.logo,
-          startYear: yearOf(s.start),
-          endYear: yearOf(s.end)
-        });
-      });
-
-      if (clubs.length < 2) throw new Error("not enough clubs");
-      return clubs;
-    }
-
-    function getClubs(player) {
-      if (!clubsCache[player.wiki]) {
-        clubsCache[player.wiki] = fetchClubs(player).catch(err => {
-          delete clubsCache[player.wiki]; // نسمح بإعادة المحاولة
-          throw err;
-        });
-      }
-      return clubsCache[player.wiki];
-    }
-
-    function prefetchNext() {
-      for (let k = 1; k <= 2; k++) {
-        const p = rounds[currentIndex + k];
-        if (p) getClubs(p).catch(() => {});
-      }
-    }
-
-    /* ---------------- واجهة اللعبة ---------------- */
-
-    const container = document.getElementById("careerContainer");
-
-    function yearsText(c) {
-      if (!c.startYear && !c.endYear) return "";
-      if (c.startYear && c.endYear && c.startYear !== c.endYear) return `${c.startYear} – ${c.endYear}`;
-      if (c.startYear && !c.endYear) return `${c.startYear} – ...`;
-      return String(c.startYear || c.endYear);
-    }
-
-    function makeLogo(club) {
-      const wrap = document.createElement("div");
-      wrap.className = "club-logo";
-      const fallback = () => {
-        wrap.textContent = "";
-        const s = document.createElement("span");
-        s.textContent = (club.nameEn || club.name || "?").trim().charAt(0).toUpperCase();
-        wrap.appendChild(s);
-      };
-      if (club.logo) {
-        const img = document.createElement("img");
-        img.alt = "";
-        img.loading = "lazy";
-        img.onerror = fallback;
-        img.src = club.logo;
-        wrap.appendChild(img);
-      } else {
-        fallback();
-      }
-      return wrap;
-    }
-
-    function makeConnector(isNew) {
-      const d = document.createElement("div");
-      d.className = "connector" + (isNew ? " new" : "");
-      d.innerHTML = '<svg viewBox="0 0 18 26" width="18" height="26" aria-hidden="true"><path d="M9 1v19M3 14l6 8 6-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      return d;
-    }
-
-    function renderClubsList(animateFrom = -1) {
-      container.className = "career-container";
-      container.innerHTML = "";
-
-      loadedClubs.slice(0, revealedCount).forEach((club, idx) => {
-        const isNew = idx >= animateFrom && animateFrom >= 0;
-        if (idx > 0) container.appendChild(makeConnector(isNew));
-
-        const node = document.createElement("div");
-        node.className = "club-node" + (isNew ? " new" : "");
-
-        const info = document.createElement("div");
-        info.className = "club-info";
-        const nm = document.createElement("div");
-        nm.className = "club-name";
-        nm.textContent = club.name;
-        info.appendChild(nm);
-        const sub = [club.nameEn, yearsText(club)].filter(Boolean).join("  •  ");
-        if (sub) {
-          const s = document.createElement("div");
-          s.className = "club-sub";
-          s.textContent = sub;
-          info.appendChild(s);
-        }
-
-        const order = document.createElement("div");
-        order.className = "club-order";
-        order.textContent = idx + 1;
-
-        node.append(makeLogo(club), info, order);
-        container.appendChild(node);
-      });
-
-      const hidden = loadedClubs.length - revealedCount;
-      if (hidden > 0) {
-        container.appendChild(makeConnector(false));
-        const ph = document.createElement("div");
-        ph.className = "club-node hidden-node";
-        ph.innerHTML = '<div class="club-logo"><span>؟</span></div>';
-        const info = document.createElement("div");
-        info.className = "club-info";
-        const nm = document.createElement("div");
-        nm.className = "club-name";
-        nm.textContent = hidden === 1 ? "محطة مخفية واحدة" : `${hidden} محطات مخفية`;
-        info.appendChild(nm);
-        ph.appendChild(info);
-        container.appendChild(ph);
-      }
-
-      document.getElementById("btnReveal").disabled = (revealedCount >= loadedClubs.length);
-      if (animateFrom >= 0) container.scrollTop = container.scrollHeight;
-    }
-
-    async function loadRound() {
-      if (currentIndex >= rounds.length) {
-        showGameOver();
-        return;
-      }
-
-      const feedback = document.getElementById("feedback");
-      const input = document.getElementById("playerInput");
-
-      input.value = "";
-      feedback.innerText = "";
-      feedback.className = "feedback-box";
-      setControlsState(false);
-
-      container.className = "career-container center";
-      container.innerHTML = `
-        <div class="spinner"></div>
-        <div style="font-size:13px; color:var(--text-muted);">جاري جلب مسار اللاعب من الإنترنت...</div>
-      `;
-
-      document.getElementById("roundTracker").innerText = `${currentIndex + 1} / ${rounds.length}`;
-      document.getElementById("score").innerText = score;
-
+function fetchWithTimeout(url, ms) {
+  const ctrl = new AbortController(), t = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(t));
+}
+async function wd(params) {
+  const res = await fetchWithTimeout(`${WD_API}?${new URLSearchParams({ format: "json", origin: "*", ...params })}`, 9000);
+  if (!res.ok) throw new Error("Wikidata " + res.status);
+  const d = await res.json();
+  if (d.error) throw new Error("Wikidata " + (d.error.info || "error"));
+  return d;
+}
+const yearOf = q => { const t = q?.[0]?.datavalue?.value?.time; const m = t && t.match(/^[+-](\d{4})/); return m ? +m[1] : null; };
+function pickLogo(claims) {
+  const list = (claims?.P154 || []).filter(c => c.rank !== "deprecated" && c.mainsnak?.datavalue);
+  if (!list.length) return null;
+  const cur = list.filter(c => !c.qualifiers?.P582);
+  const file = (cur.length ? cur : list).slice(-1)[0].mainsnak.datavalue.value;
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=128`;
+}
+async function resolveEntity(wiki) {
+  const p = await wd({ action: "wbgetentities", sites: "enwiki", titles: wiki, normalize: "1", props: "claims" });
+  const ent = Object.values(p.entities || {})[0];
+  if (ent && ent.missing === undefined && ent.claims?.P54) return ent;
+  // لو العنوان مش مظبوط: بحث احتياطي عن أول "footballer"
+  const s = await wd({ action: "wbsearchentities", search: baseTitle(wiki), language: "en", type: "item", limit: "8" });
+  const cand = (s.search || []).find(x => /footballer|soccer/i.test(x.description || ""));
+  if (!cand) throw new Error("Player not found: " + wiki);
+  const e = await wd({ action: "wbgetentities", ids: cand.id, props: "claims" });
+  return e.entities[cand.id];
+}
+async function fetchClubsLive(player) {
+  const ent = await resolveEntity(player.wiki);
+  const spells = (ent.claims?.P54 || [])
+    .filter(s => s.rank !== "deprecated" && s.mainsnak?.datavalue?.value?.id)
+    .map((s, i) => ({ qid: s.mainsnak.datavalue.value.id, start: yearOf(s.qualifiers?.P580), end: yearOf(s.qualifiers?.P582), i }));
+  if (spells.length && spells.every(x => x.start)) spells.sort((a, b) => a.start - b.start || a.i - b.i);
+  const ids = [...new Set(spells.map(s => s.qid))], data = {};
+  for (let i = 0; i < ids.length; i += 50) {
+    const d = await wd({ action: "wbgetentities", ids: ids.slice(i, i + 50).join("|"), props: "labels|claims", languages: "en|ar" });
+    Object.assign(data, d.entities);
+  }
+  const out = [];
+  for (const s of spells) {
+    const e = data[s.qid], en = e?.labels?.en?.value;
+    if (!en) continue;
+    const types = (e.claims?.P31 || []).map(c => c.mainsnak?.datavalue?.value?.id);
+    if (types.some(t => NATIONAL_TYPES.includes(t)) || BAD_ANY.test(en) || BAD_END.test(en)) continue;
+    const item = { en, ar: e.labels?.ar?.value || null, logo: pickLogo(e.claims), start: s.start, end: s.end };
+    const last = out[out.length - 1];
+    if (last && last.en === item.en) { last.end = item.end; if (!last.start) last.start = item.start; continue; }
+    out.push(item);
+  }
+  if (out.length < 2) throw new Error("Not enough clubs: " + player.wiki);
+  return out;
+}
+const mem = {};
+async function getClubs(p) {
+  if (mem[p.wiki]) return mem[p.wiki];
+  const key = "koora:v2:" + p.wiki, c = store.get(key, null);
+  if (c && c.clubs?.length >= 2 && Date.now() - c.t < 30 * 864e5) return (mem[p.wiki] = { clubs: c.clubs, live: true });
+  let err;
+  if (Date.now() >= apiDownUntil) {
+    for (let a = 0; a < 2; a++) {
       try {
-        loadedClubs = await getClubs(rounds[currentIndex]);
-        revealedCount = Math.min(2, loadedClubs.length);
-        setControlsState(true);
-        renderClubsList();
-        prefetchNext();
-      } catch (err) {
-        console.error(err);
-        container.className = "career-container center";
-        container.innerHTML = `
-          <div style="color:var(--danger); font-size:14px; padding:10px; line-height:1.8;">
-            تعذر جلب بيانات اللاعب في هذه اللحظة.<br>تحقق من اتصال الإنترنت وحاول مجدداً.
-          </div>
-          <div style="display:flex; gap:8px; justify-content:center;">
-            <button class="btn-secondary" style="padding:10px 18px;" onclick="loadRound()">إعادة المحاولة</button>
-            <button class="btn-secondary" style="padding:10px 18px;" onclick="skipBroken()">لاعب تاني</button>
-          </div>
-        `;
+        const clubs = await fetchClubsLive(p);
+        store.set(key, { t: Date.now(), clubs });
+        return (mem[p.wiki] = { clubs, live: true });
+      } catch (e) {
+        err = e;
+        if (/^Player not found|^Not enough/.test(e.message)) break;
+        await new Promise(r => setTimeout(r, 500));
       }
     }
+    if (err && !/^Player not found|^Not enough/.test(err.message)) apiDownUntil = Date.now() + 45000;
+  }
+  if (p.clubs) {
+    const clubs = p.clubs.filter((c, i, a) => c !== a[i - 1]).map(en => ({ en, ar: CLUBS[en]?.ar || null, logo: null, start: null, end: null }));
+    return { clubs, live: false };
+  }
+  throw err || new Error("offline");
+}
+function prefetch(list) {
+  let i = 0;
+  const w = async () => { while (i < list.length) { try { await getClubs(list[i++]); } catch {} } };
+  w(); w();
+}
 
-    // لو لاعب معين مش راضي يحمل، نبدله بلاعب جديد من اللي مش مستخدمين
-    function skipBroken() {
-      const used = new Set(rounds.map(r => r.wiki));
-      const spare = ROSTER.filter(p => !used.has(p.wiki));
-      if (spare.length) {
-        rounds[currentIndex] = spare[Math.floor(Math.random() * spare.length)];
-      } else {
-        rounds.splice(currentIndex, 1);
-      }
-      loadRound();
+/* ================= مولدات الألغاز ================= */
+function genLinks(pool, n) {
+  const out = [], used = new Set();
+  const clubKeys = Object.keys(CLUBS);
+  const attempt = (pl) => {
+    for (let t = 0; t < 400 && out.length < n; t++) {
+      const c = clubKeys[Math.floor(Math.random() * clubKeys.length)];
+      if (used.has(c)) continue;
+      const cand = pl.filter(p => p.clubs.includes(c));
+      if (cand.length < 2) continue;
+      const k = Math.min(cand.length, Math.random() < 0.6 ? 3 : 2);
+      const chosen = shuffle(cand.slice()).slice(0, k);
+      const answers = clubKeys.filter(x => chosen.every(p => p.clubs.includes(x)));
+      used.add(c);
+      out.push({ players: chosen, answers });
     }
+  };
+  attempt(pool);
+  if (out.length < n) attempt(PLAYERS);
+  return out;
+}
+const sat = (p, cat) => cat.t === "c" ? p.clubs.includes(cat.k) : p.nat === cat.k;
+function genGrid() {
+  const clubCats = Object.keys(CLUBS).filter(c => PLAYERS.filter(p => p.clubs.includes(c)).length >= 3).map(k => ({ t: "c", k }));
+  const natCats = Object.keys(NAT).filter(n => PLAYERS.filter(p => p.nat === n).length >= 2).map(k => ({ t: "n", k }));
+  const all = [...clubCats, ...natCats];
+  for (let i = 0; i < 6000; i++) {
+    const s = shuffle(all.slice()), rows = s.slice(0, 3), cols = s.slice(3, 6);
+    if (![...rows, ...cols].some(c => c.t === "n")) continue;
+    let ok = true, total = 0;
+    for (const r of rows) { for (const c of cols) {
+      if (r.t === "n" && c.t === "n") { ok = false; break; }
+      const v = PLAYERS.filter(p => sat(p, r) && sat(p, c)).length;
+      if (!v) { ok = false; break; }
+      total += v;
+    } if (!ok) break; }
+    if (ok && total >= 11) return { rows, cols };
+  }
+  return null;
+}
+/*__LOGIC_END__*/
 
-    function revealNextClub() {
-      if (revealedCount < loadedClubs.length) {
-        revealedCount++;
-        renderClubsList(revealedCount - 1);
-      }
+/* ================= الواجهة ================= */
+const app = $("#app");
+let S = null, sid = 0;
+const ARROW = '<div class="arrow"><svg viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v18"/><path d="M5.5 14.5 12 21l6.5-6.5"/></svg></div>';
+const TIERS = [[1,"المستوى 1","نجوم 2014 فصاعداً"],[2,"المستوى 2","العصر الذهبي 2004–2014"],[3,"المستوى 3","التريفيا العميقة"],["all","كل المستويات","كل اللاعبين"]];
+const curTier = () => store.get("koora:tier", 1);
+const pool = () => { const t = curTier(); const l = t === "all" ? PLAYERS : PLAYERS.filter(p => p.tier === t); return l.length ? l : PLAYERS; };
+const stage = h => { $("#stage").innerHTML = h; };
+const setFb = (m, c = "") => { const f = $("#fb"); if (f) { f.className = "fb " + c; f.textContent = m; } };
+const finePointer = () => window.matchMedia && matchMedia("(pointer:fine)").matches;
+const focusAns = () => { const a = $("#ans"); if (a && finePointer()) a.focus({ preventScroll: true }); };
+
+function logoHTML(c) {
+  const fb = esc(initials(c.en));
+  return c.logo
+    ? `<div class="logo"><img src="${esc(c.logo)}" alt="" loading="lazy" referrerpolicy="no-referrer" data-fb="${fb}"></div>`
+    : `<div class="logo fb2">${fb}</div>`;
+}
+function initials(n) { return n.split(/\s+/).filter(w => /[A-Za-zÀ-ž]/.test(w[0] || "")).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "FC"; }
+const yearsText = c => !c.start ? "" : (c.end && c.end !== c.start ? `${c.start} – ${c.end}` : `${c.start}`);
+function clubHTML(c, i, anim, delay) {
+  const name = c.ar || CLUBS[c.en]?.ar || c.en, y = yearsText(c);
+  return `<div class="club${anim ? " new" : ""}" style="${delay ? `animation-delay:${delay}ms` : ""}">${logoHTML(c)}
+    <div class="cinfo"><div class="cname">${esc(name)}</div>${name !== c.en ? `<div class="csub">${esc(c.en)}</div>` : ""}</div>
+    <div class="cmeta"><span class="num">${i + 1}</span>${y ? `<span class="yrs">${y}</span>` : ""}</div></div>`;
+}
+function timelineHTML(clubs, shown, animFrom, stagger) {
+  let h = "";
+  for (let i = 0; i < shown; i++) { if (i) h += ARROW; h += clubHTML(clubs[i], i, i >= animFrom, stagger ? (i - animFrom) * 80 : 0); }
+  const rem = clubs.length - shown;
+  if (rem > 0) h += ARROW + `<div class="club locked">${rem === 1 ? "محطة مخفية واحدة" : rem + " محطات مخفية"}</div>`;
+  return h;
+}
+document.addEventListener("error", e => {
+  const t = e.target;
+  if (t && t.tagName === "IMG" && t.dataset && t.dataset.fb !== undefined) { const d = t.parentElement; d.className = "logo fb2"; d.textContent = t.dataset.fb; }
+}, true);
+
+/* ----- الشاشة الرئيسية ----- */
+function home() {
+  S = null; sid++;
+  const tier = curTier(), best = m => store.get("koora:best:" + m, 0);
+  app.innerHTML = `<div class="wrap">
+    <header class="hero"><h1>مركز تدريب التريفيا الكروية</h1>
+      <p class="sub">اختار مستواك وطوّر معلوماتك عن الأندية والمسارات</p>
+      <span class="badge"><span class="dot${Date.now() < apiDownUntil ? " off" : ""}"></span>بيانات حية من Wikidata + كاش على جهازك</span></header>
+    <h2>المستوى</h2>
+    <div class="chips">${TIERS.map(([k, t, d]) => `<button class="chip${tier === k ? " on" : ""}" data-a="tier" data-k="${k}">${t}<small>${d}</small></button>`).join("")}</div>
+    <h2>الطور</h2>
+    <div class="modes">
+      <button class="mode" data-a="start" data-m="career"><b>مسار اللاعب</b><span>الأندية بالترتيب، واكشف محطة إضافية مقابل خصم نقاط</span><em>أفضل نتيجة: ${best("career")}</em></button>
+      <button class="mode" data-a="start" data-m="link"><b>النادي المشترك</b><span>لاعبين أو ثلاثة... إيه النادي اللي جمعهم؟</span><em>أفضل نتيجة: ${best("link")}</em></button>
+      <button class="mode" data-a="start" data-m="grid"><b>شبكة 3×3</b><span>املأ كل خانة بلاعب يحقق شرط الصف والعمود</span><em>أفضل نتيجة: ${best("grid")}</em></button>
+      <button class="mode" data-a="start" data-m="cards"><b>بطاقات التعلم</b><span>راجع مسارات اللاعبين والتشكيلات التاريخية بدون ضغط وقت</span><em>بدون وقت</em></button>
+    </div>
+    <p class="foot">${PLAYERS.length} لاعب في قاعدة التدريب • الكاش بيحفظ كل لاعب 30 يوم</p></div>`;
+}
+function shell(title) {
+  app.innerHTML = `<div class="wrap"><div class="topbar">
+    <button class="btn b2 small" data-a="home">الرئيسية</button><div class="ttl">${title}</div>
+    <span class="pill" id="sc">0 نقطة</span></div>
+    <div class="bar"><i id="pg"></i></div>
+    <div class="stage" id="stage"></div><div class="fb" id="fb"></div></div>`;
+}
+function updateTop() {
+  if (!S || !$("#sc")) return;
+  $("#sc").textContent = (S.mode === "cards" ? `${S.correct} ✓` : `${S.score} نقطة`);
+  $("#pg").style.width = Math.min(100, Math.round(S.i / Math.max(1, S.total) * 100)) + "%";
+}
+function newSession(mode, extra) { S = Object.assign({ id: ++sid, mode, score: 0, correct: 0, wrong: 0, total: 0, review: [], i: 0, t0: Date.now(), locked: true }, extra); }
+const ansControls = (reveal) => `<input class="ans" id="ans" type="text" placeholder="اكتب الإجابة..." autocomplete="off" autocapitalize="off" spellcheck="false">
+  <div class="row2"><button class="btn b1" data-a="submit">تأكيد الإجابة</button>${reveal ? `<button class="btn b2" data-a="reveal" id="rv">${reveal}</button>` : `<button class="btn b2" data-a="hint">تلميح (-1)</button>`}</div>
+  <button class="btn b3" data-a="skip">تخطي</button>`;
+const nextBtn = () => `<button class="btn b4" data-a="next">${S.i + 1 >= S.total ? "عرض النتيجة" : "التالي ←"}</button>`;
+
+/* ----- الطور 1: مسار اللاعب ----- */
+function startCareer() {
+  const qs = shuffle(pool().slice()).slice(0, 10);
+  newSession("career", { qs, total: qs.length });
+  prefetch(qs); shell("مسار اللاعب"); careerRound();
+}
+async function careerRound() {
+  if (S.i >= S.total) return finish();
+  const id = S.id, p = S.qs[S.i];
+  S.locked = true; S.done = false; S.clubs = null; updateTop(); setFb("");
+  stage(`<div class="state"><div class="spinner"></div>جاري جلب مسار اللاعب...</div>`);
+  try {
+    const r = await getClubs(p);
+    if (!S || S.id !== id || S.qs[S.i] !== p) return;
+    S.clubs = r.clubs; S.live = r.live; S.shown = Math.min(2, r.clubs.length); S.locked = false;
+    stage(`${r.live ? "" : '<div class="note">وضع احتياطي: بيانات محفوظة بدون شعارات</div>'}
+      <div class="tl" id="tl">${timelineHTML(S.clubs, S.shown, 0)}</div>
+      <div id="ctl">${ansControls("كشف محطة (-1)")}</div>`);
+    focusAns();
+  } catch (e) {
+    if (!S || S.id !== id) return;
+    stage(`<div class="state" style="color:var(--bad)">تعذر جلب بيانات اللاعب.<br>تأكد من الاتصال وحاول تاني.</div>
+      <div class="row2"><button class="btn b2" data-a="retry">إعادة المحاولة</button><button class="btn b3" data-a="skipErr">تخطي اللاعب</button></div>`);
+  }
+}
+const careerPts = () => Math.max(1, 6 - (S.shown - 2));
+function careerEnd(ok, pts) {
+  const p = S.qs[S.i];
+  S.done = true; S.locked = true;
+  if (ok) { S.score += pts; S.correct++; if (S.shown - 2 >= 3) S.review.push({ t: p.ar, d: "احتجت كشف محطات كتير — راجع مساره" }); }
+  else S.review.push({ t: p.ar, d: "تخطيت اللاعب — مساره: " + S.clubs.map(c => c.ar || CLUBS[c.en]?.ar || c.en).join(" ← ") });
+  const prev = S.shown; S.shown = S.clubs.length;
+  $("#tl").innerHTML = timelineHTML(S.clubs, S.shown, prev, true);
+  $("#ctl").innerHTML = nextBtn();
+  setFb(ok ? `صحيح! هو ${p.ar} (+${pts} نقاط)` : `اللاعب هو: ${p.ar}`, ok ? "ok" : "info");
+  updateTop();
+}
+
+/* ----- الطور 2: النادي المشترك ----- */
+function startLink() {
+  const qs = genLinks(pool(), 8);
+  newSession("link", { qs, total: qs.length });
+  prefetch([]); shell("النادي المشترك"); linkRound();
+}
+function linkRound() {
+  if (S.i >= S.total) return finish();
+  const q = S.qs[S.i]; S.hints = 0; S.done = false; S.locked = false; updateTop(); setFb("");
+  stage(`<div class="prompt">ما النادي اللي لعب له كل هؤلاء اللاعبين؟</div>
+    <div class="plist">${q.players.map((p, i) => `<div class="pcard" style="animation-delay:${i * 90}ms"><b>${esc(p.ar)}</b><small>${esc(baseTitle(p.wiki))}</small><span>${esc(NAT[p.nat][0])}</span></div>`).join("")}</div>
+    <div class="hint" id="hint"></div><div id="ctl">${ansControls()}</div>`);
+  focusAns();
+}
+function linkEnd(ok, pts) {
+  const q = S.qs[S.i], names = q.answers.map(clubLabel).join(" / ");
+  S.done = true; S.locked = true;
+  if (ok) { S.score += pts; S.correct++; } else S.review.push({ t: q.players.map(p => p.ar).join(" + "), d: "النادي المشترك: " + names });
+  $("#ctl").innerHTML = nextBtn();
+  setFb(ok ? `صحيح! ${names} (+${pts} نقاط)` : `الإجابة: ${names}`, ok ? "ok" : "info");
+  updateTop();
+}
+
+/* ----- الطور 3: شبكة 3×3 ----- */
+function startGrid() {
+  let g = null;
+  for (let i = 0; i < 12 && !g; i++) g = genGrid();
+  if (!g) { alert("تعذر توليد شبكة، جرّب تاني."); return home(); }
+  newSession("grid", { grid: g, total: 9, cells: Array(9).fill(null), sel: null, used: new Set(), locked: false });
+  shell("شبكة 3×3"); gridPaint();
+}
+const catHead = c => c.t === "c" ? `${esc(clubLabel(c.k))}<small>نادي</small>` : `${esc(NAT[c.k][0])}<small>جنسية</small>`;
+function gridPaint() {
+  const g = S.grid;
+  let h = '<div class="gtable"><div class="gc corner"></div>' + g.cols.map(c => `<div class="gc head">${catHead(c)}</div>`).join("");
+  for (let r = 0; r < 3; r++) {
+    h += `<div class="gc head">${catHead(g.rows[r])}</div>`;
+    for (let c = 0; c < 3; c++) {
+      const i = r * 3 + c, cell = S.cells[i];
+      h += cell ? `<div class="gc ok${cell.helped ? " help" : ""}">${esc(cell.p.ar)}</div>`
+        : `<button class="gc${S.sel === i ? " sel" : ""}" data-a="cell" data-i="${i}" aria-label="خانة ${i + 1}">؟</button>`;
     }
+  }
+  h += "</div>";
+  h += S.sel === null ? `<div class="state" style="padding:8px">اضغط على خانة وبعدين اكتب اسم لاعب يحقق الشرطين</div>`
+    : `<input class="ans" id="ans" type="text" placeholder="اسم اللاعب..." autocomplete="off" autocapitalize="off" spellcheck="false">
+       <div class="row2"><button class="btn b1" data-a="submit">تأكيد</button><button class="btn b2" data-a="reveal">اكشف لاعب (بدون نقاط)</button></div>`;
+  h += `<button class="btn b3" data-a="finishGrid">إنهاء الجولة</button>`;
+  stage(h); updateTop(); focusAns();
+}
+const gridFilled = () => S.cells.filter(Boolean).length;
+function gridValid(i) { const r = S.grid.rows[Math.floor(i / 3)], c = S.grid.cols[i % 3]; return PLAYERS.filter(p => sat(p, r) && sat(p, c)); }
+function gridSubmit() {
+  if (S.sel === null) return setFb("اختار خانة الأول", "info");
+  const v = $("#ans").value; if (!v.trim()) return;
+  const p = findPlayer(v);
+  if (!p) return setFb("اللاعب ده مش في قاعدة التدريب (" + PLAYERS.length + " لاعب)", "info");
+  if (S.used.has(p.wiki)) return setFb("استخدمت اللاعب ده قبل كده", "info");
+  if (!gridValid(S.sel).includes(p)) { S.wrong++; $("#ans").classList.add("shake"); return setFb("اللاعب ده مش مطابق للشرط", "bad"); }
+  S.cells[S.sel] = { p, helped: false }; S.used.add(p.wiki); S.score += 3; S.correct++; S.sel = null; S.i = gridFilled();
+  setFb(`صحيح! ${p.ar} (+3 نقاط)`, "ok");
+  if (gridFilled() === 9) return finish(); gridPaint();
+}
+function gridReveal() {
+  if (S.sel === null) return;
+  const opts = gridValid(S.sel).filter(p => !S.used.has(p.wiki)); if (!opts.length) return setFb("مفيش لاعب متاح للخانة دي", "info");
+  const p = opts[0], r = S.grid.rows[Math.floor(S.sel / 3)], c = S.grid.cols[S.sel % 3];
+  S.cells[S.sel] = { p, helped: true }; S.used.add(p.wiki);
+  S.review.push({ t: `${r.t === "c" ? clubLabel(r.k) : NAT[r.k][0]} × ${c.t === "c" ? clubLabel(c.k) : NAT[c.k][0]}`, d: "اللاعب: " + p.ar });
+  S.sel = null; S.i = gridFilled(); setFb(""); if (gridFilled() === 9) return finish(); gridPaint();
+}
+function gridQuit() {
+  S.cells.forEach((cell, i) => {
+    if (cell) return;
+    const r = S.grid.rows[Math.floor(i / 3)], c = S.grid.cols[i % 3];
+    S.review.push({ t: `${r.t === "c" ? clubLabel(r.k) : NAT[r.k][0]} × ${c.t === "c" ? clubLabel(c.k) : NAT[c.k][0]}`, d: "أمثلة: " + gridValid(i).slice(0, 3).map(p => p.ar).join("، ") });
+  });
+  finish();
+}
 
-    function checkAnswer() {
-      const input = document.getElementById("playerInput").value;
-      if (!input.trim()) return;
+/* ----- الطور 4: بطاقات التعلم ----- */
+function cardsMenu() {
+  newSession("cards", { total: 0 }); shell("بطاقات التعلم");
+  const pl = pool();
+  stage(`<div class="prompt">اختار المجموعة</div><div class="decks">
+    <button class="chip" data-a="deck" data-k="tier">لاعبو المستوى المختار<small>${pl.length} لاعب — مساراتهم كاملة</small></button>
+    ${SQUADS.map(s => `<button class="chip" data-a="deck" data-k="${s.k}">${s.name}<small>${s.players.length} لاعب — تشكيل المباراة النهائية</small></button>`).join("")}</div>`);
+  $("#sc").textContent = "";
+}
+function startDeck(k) {
+  let qs;
+  if (k === "tier") qs = shuffle(pool().slice());
+  else qs = SQUADS.find(s => s.k === k).players.map(([wiki, ar, pos]) => PLAYERS.find(p => p.wiki === wiki) ? Object.assign({}, PLAYERS.find(p => p.wiki === wiki), { pos }) : { wiki, ar, pos, keys: [] });
+  newSession("cards", { qs, total: qs.length }); prefetch(qs); cardRound();
+}
+function cardRound() {
+  if (S.i >= S.total) return finish();
+  S.flipped = false; updateTop(); setFb("");
+  const p = S.qs[S.i];
+  stage(`<div class="flip" data-a="flip" role="button" tabindex="0"><b>${esc(p.ar)}</b><small>${esc(baseTitle(p.wiki))}</small>${p.pos ? `<span class="pos" style="color:var(--muted);font-size:13px">${esc(p.pos)}</span>` : ""}<i>اضغط لقلب البطاقة ومعرفة المسار</i></div>
+    <p class="sub" style="text-align:center">${S.i + 1} / ${S.total}</p>`);
+}
+async function cardFlip() {
+  if (S.flipped) return; S.flipped = true;
+  const id = S.id, p = S.qs[S.i];
+  stage(`<div class="state"><div class="spinner"></div>جاري جلب المسار...</div>`);
+  try {
+    const r = await getClubs(p);
+    if (!S || S.id !== id || S.qs[S.i] !== p) return;
+    stage(`<div class="prompt">${esc(p.ar)}</div>${r.live ? "" : '<div class="note">وضع احتياطي: بدون شعارات</div>'}
+      <div class="tl">${timelineHTML(r.clubs, r.clubs.length, 0, true)}</div>
+      <div class="row2"><button class="btn b4" data-a="know">عرفتها ✓</button><button class="btn b3" data-a="again1">راجعها لاحقاً</button></div>`);
+  } catch {
+    stage(`<div class="state" style="color:var(--bad)">تعذر جلب المسار (مفيش بيانات احتياطية للاعب ده).</div>
+      <div class="row2"><button class="btn b2" data-a="flipRetry">إعادة المحاولة</button><button class="btn b3" data-a="again1">راجعها لاحقاً</button></div>`);
+  }
+}
 
-      const userGuess = cleanStr(input);
-      const player = rounds[currentIndex];
-      const feedback = document.getElementById("feedback");
+/* ----- الملخص النهائي ----- */
+function finish() {
+  const secs = Math.round((Date.now() - S.t0) / 1000);
+  let acc;
+  if (S.mode === "grid") { const n = S.correct + S.wrong; acc = n ? Math.round(S.correct / n * 100) : 0; }
+  else acc = S.total ? Math.round(S.correct / S.total * 100) : 0;
+  const isCards = S.mode === "cards";
+  if (!isCards) { const k = "koora:best:" + S.mode; if (S.score > store.get(k, 0)) store.set(k, S.score); }
+  const mm = Math.floor(secs / 60), ss = String(secs % 60).padStart(2, "0");
+  const msg = acc >= 80 ? "أداء ممتاز!" : acc >= 50 ? "كويس، كمّل تدريب" : "محتاج مراجعة، البطاقات هتساعدك";
+  app.innerHTML = `<div class="wrap"><div class="stage sum">
+    <h1>اكتملت الجولة</h1><p class="sub">${msg}</p>
+    ${isCards ? `<div class="big">${S.correct}/${S.total}</div><p class="sub">بطاقات عرفتها</p>` : `<div class="big">${S.score}</div><p class="sub">نقطة</p>`}
+    <div class="stats"><div class="stat"><b>${S.correct}${S.mode === "grid" ? "/9" : "/" + S.total}</b><small>إجابات صحيحة</small></div>
+      <div class="stat"><b>${acc}%</b><small>الدقة</small></div><div class="stat"><b>${mm}:${ss}</b><small>الوقت</small></div></div>
+    ${S.review.length ? `<div class="rev"><h3>نقاط تحتاج مراجعة (${S.review.length})</h3>${S.review.map(r => `<div class="ri">${esc(r.t)}<small>${esc(r.d)}</small></div>`).join("")}</div>` : ""}
+    <div class="row2"><button class="btn b1" data-a="start" data-m="${S.mode}">جولة جديدة</button><button class="btn b2" data-a="home">الرئيسية</button></div></div></div>`;
+}
 
-      const match = player.keys.some(k => cleanStr(k) === userGuess);
-
-      if (match) {
-        const pts = Math.max(1, (loadedClubs.length - revealedCount + 1));
-        score += pts;
-        document.getElementById("score").innerText = score;
-        feedback.innerText = `صحيح! هو ${player.name} (+${pts} نقاط)`;
-        feedback.className = "feedback-box correct";
-        setControlsState(false);
-        setTimeout(() => { currentIndex++; loadRound(); }, 1500);
-      } else {
-        feedback.innerText = "غير صحيح، حاول ثانية أو اكشف محطة أخرى";
-        feedback.className = "feedback-box wrong";
-      }
+/* ----- الأحداث ----- */
+const actions = {
+  home,
+  tier: d => { store.set("koora:tier", d.k === "all" ? "all" : +d.k); home(); },
+  start: d => ({ career: startCareer, link: startLink, grid: startGrid, cards: cardsMenu }[d.m])(),
+  retry: () => careerRound(),
+  skipErr: () => { S.i++; careerRound(); },
+  submit: () => {
+    if (!S || S.locked) return;
+    if (S.mode === "grid") return gridSubmit();
+    const el = $("#ans"), v = el.value; if (!v.trim()) return;
+    if (S.mode === "career") {
+      const p = S.qs[S.i];
+      if (playerNames(p).has(nrm(v))) careerEnd(true, careerPts());
+      else { el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setFb("غير صحيح، حاول تاني أو اكشف محطة", "bad"); }
+    } else if (S.mode === "link") {
+      const q = S.qs[S.i], g = nrm(v);
+      if (q.answers.some(c => clubNames(c).has(g))) linkEnd(true, Math.max(1, 3 - S.hints));
+      else { el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setFb("غير صحيح، جرّب تاني", "bad"); }
     }
-
-    function skipPlayer() {
-      const player = rounds[currentIndex];
-      const feedback = document.getElementById("feedback");
-      feedback.innerText = `اللاعب هو: ${player.name}`;
-      feedback.className = "feedback-box info";
-      setControlsState(false);
-      setTimeout(() => { currentIndex++; loadRound(); }, 1700);
+  },
+  reveal: () => {
+    if (!S || S.locked) return;
+    if (S.mode === "grid") return gridReveal();
+    if (S.mode === "career" && S.shown < S.clubs.length) {
+      S.shown++; $("#tl").innerHTML = timelineHTML(S.clubs, S.shown, S.shown - 1);
+      if (S.shown >= S.clubs.length) $("#rv").disabled = true;
+      setFb(`المحطات المكشوفة: ${S.shown} — النقاط المتاحة: ${careerPts()}`, "info");
     }
+  },
+  hint: () => {
+    if (!S || S.locked || S.mode !== "link") return;
+    const c = S.qs[S.i].answers[0]; S.hints++;
+    $("#hint").textContent = `يبدأ بحرف: ${c[0].toUpperCase()}${CLUBS[c]?.ar ? " / " + CLUBS[c].ar[0] : ""}`;
+  },
+  skip: () => {
+    if (!S || S.locked) return;
+    if (S.mode === "career") careerEnd(false, 0); else if (S.mode === "link") linkEnd(false, 0);
+  },
+  next: () => { S.i++; ({ career: careerRound, link: linkRound }[S.mode])(); },
+  cell: d => { if (S && S.mode === "grid" && !S.cells[+d.i]) { S.sel = +d.i; setFb(""); gridPaint(); } },
+  finishGrid: () => gridQuit(),
+  deck: d => startDeck(d.k),
+  flip: () => cardFlip(),
+  flipRetry: () => { S.flipped = false; cardFlip(); },
+  know: () => { S.correct++; S.i++; cardRound(); },
+  again1: () => { const p = S.qs[S.i]; S.review.push({ t: p.ar, d: p.pos ? "مركزه: " + p.pos : "راجع مساره" }); S.i++; cardRound(); }
+};
+app.addEventListener("click", e => { const b = e.target.closest("[data-a]"); if (b && actions[b.dataset.a]) actions[b.dataset.a](b.dataset); });
+app.addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.id === "ans") actions.submit();
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList?.contains("flip")) { e.preventDefault(); actions.flip(); }
+});
 
-    function setControlsState(enabled) {
-      document.getElementById("btnSubmit").disabled = !enabled;
-      document.getElementById("btnReveal").disabled = !enabled;
-      document.getElementById("btnSkip").disabled = !enabled;
-      document.getElementById("playerInput").disabled = !enabled;
-      if (enabled) document.getElementById("playerInput").focus();
-    }
-
-    function showGameOver() {
-      document.getElementById("appCard").innerHTML = `
-        <div class="header" style="margin-bottom:20px;">
-          <h1>اكتمل التحدي!</h1>
-          <div class="badge"><div class="badge-dot"></div><span>Final Result</span></div>
-        </div>
-        <div style="background:var(--panel); padding:24px; border-radius:14px; border:1px solid var(--card-border); margin:0 auto 20px; max-width:420px; text-align:center;">
-          <div style="font-size:13px; color:var(--text-muted); margin-bottom:6px;">مجموع نقاطك</div>
-          <div style="font-size:40px; font-weight:900; color:var(--accent-light);">${score}</div>
-        </div>
-        <button class="btn-primary" style="width:100%; max-width:420px; margin:0 auto;" onclick="location.reload()">جولة جديدة</button>
-      `;
-    }
-
-    document.getElementById("playerInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") checkAnswer();
-    });
-
-    // بداية اللعبة: 10 لاعبين عشوائي من القايمة
-    rounds = shuffle(ROSTER).slice(0, ROUNDS_PER_GAME);
-    getClubs(rounds[0]).catch(() => {}); // تسخين الأول
-    loadRound();
-  </script>
+home();
+</script>
 </body>
 </html>
