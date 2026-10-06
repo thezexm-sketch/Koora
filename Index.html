@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تريفيا مسارات اللاعبين | Live API</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --card-border: #1e293b;
+      --accent: #0284c7;
+      --accent-hover: #0369a1;
+      --accent-light: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent-light);
+      letter-spacing: -0.5px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(2, 132, 199, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-light);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin: 8px 0 16px 0;
+      font-weight: 600;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #090d16;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .career-container {
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .club-badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 10px 14px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .club-order {
+      background: var(--accent);
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .input-wrapper {
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      background: #090d16;
+      border: 1.5px solid #334155;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    button:active { transform: scale(0.98); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-secondary { background: #334155; color: white; }
+    .btn-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); width: 100%; }
+
+    .feedback-box {
+      min-height: 28px;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feedback-box.correct { color: var(--success); }
+    .feedback-box.wrong { color: var(--danger); }
+    .feedback-box.info { color: var(--warning); }
+
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top: 3px solid var(--accent-light);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 10px auto;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="app-card" id="appCard">
+    <div class="header">
+      <h1>تحدي مسار النجوم</h1>
+      <div class="badge">
+        <div class="badge-dot"></div>
+        <span>Live API: Transfermarkt + Wikidata</span>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="stat-item">
+        <span class="stat-label">مجموع النقاط</span>
+        <span class="stat-val" id="score">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">المرحلة الحالية</span>
+        <span class="stat-val" id="roundTracker">1 / 10</span>
+      </div>
+    </div>
+
+    <div class="career-container" id="careerContainer"></div>
+
+    <div class="input-wrapper">
+      <input type="text" id="playerInput" placeholder="اكتب اسم اللاعب..." autocomplete="off">
+    </div>
+
+    <div class="action-grid">
+      <button class="btn-primary" id="btnSubmit" onclick="checkAnswer()">تأكيد الإجابة</button>
+      <button class="btn-secondary" id="btnReveal" onclick="revealNextClub()">كشف محطة أخرى</button>
+    </div>
+
+    <button class="btn-danger" id="btnSkip" onclick="skipPlayer()">تخطي اللاعب</button>
+
+    <div class="feedback-box" id="feedback"></div>
+  </div>
+
+  <script>
+    // id = معرف Transfermarkt | wiki = عنوان صفحة اللاعب على ويكيبيديا الإنجليزية (بيستخدم مع Wikidata)
+    const ROSTER = [
+      { id: "3455",   wiki: "Zlatan Ibrahimović", name: "زلاتان إبراهيموفيتش", keys: ["ابراهيموفيتش", "زلاتان", "ابرا", "ibrahimovic", "zlatan"] },
+      { id: "44352",  wiki: "Luis Suárez",        name: "لويس سواريز",        keys: ["سواريز", "لويس سواريز", "suarez"] },
+      { id: "3333",   wiki: "Arjen Robben",       name: "آريين روبين",        keys: ["روبين", "روبن", "ارين روبين", "robben"] },
+      { id: "3700",   wiki: "Didier Drogba",      name: "ديدييه دروغبا",      keys: ["دروغبا", "دروجبا", "drogba"] },
+      { id: "3611",   wiki: "Carlos Tevez",       name: "كارلوس تيفيز",       keys: ["تيفيز", "كارلوس تيفيز", "tevez"] },
+      { id: "27992",  wiki: "Luka Modrić",        name: "لوكا مودريتش",       keys: ["مودريتش", "لوكا مودريتش", "modric"] },
+      { id: "35664",  wiki: "Mesut Özil",         name: "مسعود أوزيل",        keys: ["اوزيل", "أوزيل", "ozil", "oezil"] },
+      { id: "342229", wiki: "Kylian Mbappé",      name: "كيليان مبابي",       keys: ["مبابي", "كيليان مبابي", "mbappe"] },
+      { id: "418560", wiki: "Erling Haaland",     name: "إيرلينغ هالاند",     keys: ["هالاند", "هولاند", "haaland"] },
+      { id: "28003",  wiki: "Lionel Messi",       name: "ليونيل ميسي",        keys: ["ميسي", "ليو", "messi"] }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+    let revealedCount = 2;
+    let loadedClubs = [];
+    const clubsCache = {};
+
+    // تطهير النصوص للمقارنة المرنة
+    function cleanStr(str) {
+      return str.trim().toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[أإآ]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/[\s\-_'.]/g, '');
+    }
+
+    function fetchWithTimeout(url, ms = 8000) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), ms);
+      return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(t));
+    }
+
+    function dedupeConsecutive(arr) {
+      return arr.filter((c, i) => c && c !== arr[i - 1]);
+    }
+
+    // المصدر 1: Transfermarkt
+    async function fromTransfermarkt(player) {
+      const res = await fetchWithTimeout(
+        `https://transfermarkt-api.fly.dev/players/${player.id}/transfers`
+      );
+      if (!res.ok) throw new Error("Transfermarkt " + res.status);
+      const data = await res.json();
+      const list = (data.transfers || []).slice().reverse(); // الأقدم أولاً
+      const clubs = [];
+      list.forEach(t => { clubs.push(t.clubFrom?.name, t.clubTo?.name); });
+      const out = dedupeConsecutive(clubs);
+      if (out.length < 2) throw new Error("Transfermarkt empty");
+      return out;
+    }
+
+    // المصدر 2: Wikidata
+    async function fromWikidata(player) {
+      const sparql = `
+        SELECT ?clubLabel ?start WHERE {
+          ?article schema:about ?p;
+                   schema:isPartOf <https://en.wikipedia.org/>;
+                   schema:name "${player.wiki}"@en.
+          ?p p:P54 ?st.
+          ?st ps:P54 ?club.
+          ?club wdt:P31/wdt:P279* wd:Q476028.
+          OPTIONAL { ?st pq:P580 ?start. }
+          SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        } ORDER BY ?start`;
+      const url = "https://query.wikidata.org/sparql?format=json&query=" + encodeURIComponent(sparql);
+      const res = await fetchWithTimeout(url, 12000);
+      if (!res.ok) throw new Error("Wikidata " + res.status);
+      const data = await res.json();
+      const out = dedupeConsecutive(data.results.bindings.map(b => b.clubLabel.value));
+      if (out.length < 2) throw new Error("Wikidata empty");
+      return out;
+    }
+
+    // بيجرب المصدرين في نفس الوقت وياخد أول نتيجة ناجحة
+    async function fetchClubsFromAPI(player) {
+      if (clubsCache[player.id]) return clubsCache[player.id];
+      const clubs = await Promise.any([fromTransfermarkt(player), fromWikidata(player)]);
+      clubsCache[player.id] = clubs;
+      return clubs;
+    }
+
+    async function loadRound() {
+      if (currentIndex >= ROSTER.length) {
+        showGameOver();
+        return;
+      }
+
+      const container = document.getElementById("careerContainer");
+      const feedback = document.getElementById("feedback");
+      const input = document.getElementById("playerInput");
+
+      input.value = "";
+      feedback.innerText = "";
+      feedback.className = "feedback-box";
+      setControlsState(false);
+
+      container.innerHTML = `
+        <div class="spinner"></div>
+        <div style="font-size:13px; color:var(--text-muted);">جاري جلب مسار اللاعب من الإنترنت...</div>
+      `;
+
+      document.getElementById("roundTracker").innerText = `${currentIndex + 1} / ${ROSTER.length}`;
+      document.getElementById("score").innerText = score;
+
+      try {
+        const player = ROSTER[currentIndex];
+        loadedClubs = await fetchClubsFromAPI(player);
+        revealedCount = Math.min(2, loadedClubs.length);
+        setControlsState(true);
+        renderClubsList();
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `
+          <div style="color:var(--danger); font-size:13px; padding:10px;">
+            تعذر الاتصال بالـ API في هذه اللحظة.<br>تحقق من اتصال الإنترنت وحاول مجدداً.
+          </div>
+          <button class="btn-secondary" style="margin:8px auto; padding:8px 16px;" onclick="loadRound()">إعادة المحاولة</button>
+        `;
+      }
+    }
+
+    function renderClubsList() {
+      const container = document.getElementById("careerContainer");
+      container.innerHTML = "";
+
+      loadedClubs.slice(0, revealedCount).forEach((club, idx) => {
+        const item = document.createElement("div");
+        item.className = "club-badge";
+        const order = document.createElement("span");
+        order.className = "club-order";
+        order.textContent = idx + 1;
+        const nameEl = document.createElement("span");
+        nameEl.textContent = club;
+        item.append(order, nameEl);
+        container.appendChild(item);
+      });
+
+      document.getElementById("btnReveal").disabled = (revealedCount >= loadedClubs.length);
+    }
+
+    function revealNextClub() {
+      if (revealedCount < loadedClubs.length) {
+        revealedCount++;
+        renderClubsList();
+      }
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("playerInput").value;
+      if (!input.trim()) return;
+
+      const userGuess = cleanStr(input);
+      const player = ROSTER[currentIndex];
+      const feedback = document.getElementById("feedback");
+
+      const match = player.keys.some(k => cleanStr(k) === userGuess);
+
+      if (match) {
+        const pts = Math.max(1, (loadedClubs.length - revealedCount + 1));
+        score += pts;
+        document.getElementById("score").innerText = score;
+        feedback.innerText = `صحيح! هو ${player.name} (+${pts} نقاط)`;
+        feedback.className = "feedback-box correct";
+        setControlsState(false);
+        setTimeout(() => { currentIndex++; loadRound(); }, 1400);
+      } else {
+        feedback.innerText = "غير صحيح، حاول ثانية أو اكشف محطة أخرى";
+        feedback.className = "feedback-box wrong";
+      }
+    }
+
+    function skipPlayer() {
+      const player = ROSTER[currentIndex];
+      const feedback = document.getElementById("feedback");
+      feedback.innerText = `اللاعب هو: ${player.name}`;
+      feedback.className = "feedback-box info";
+      setControlsState(false);
+      setTimeout(() => { currentIndex++; loadRound(); }, 1600);
+    }
+
+    function setControlsState(enabled) {
+      document.getElementById("btnSubmit").disabled = !enabled;
+      document.getElementById("btnReveal").disabled = !enabled;
+      document.getElementById("btnSkip").disabled = !enabled;
+      document.getElementById("playerInput").disabled = !enabled;
+      if (enabled) document.getElementById("playerInput").focus();
+    }
+
+    function showGameOver() {
+      document.getElementById("appCard").innerHTML = `
+        <div class="header" style="margin-bottom:20px;">
+          <h1>اكتمل التحدي!</h1>
+          <div class="badge"><div class="badge-dot"></div><span>Final Result</span></div>
+        </div>
+        <div style="background:#090d16; padding:20px; border-radius:14px; border:1px solid var(--card-border); margin-bottom:20px;">
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:6px;">مجموع نقاطك</div>
+          <div style="font-size:36px; font-weight:900; color:var(--accent-light);">${score}</div>
+        </div>
+        <button class="btn-primary" style="width:100%;" onclick="location.reload()">جولة جديدة</button>
+      `;
+    }
+
+    document.getElementById("playerInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkAnswer();
+    });
+
+    loadRound();
+  </script>
+</body>
+</html>
